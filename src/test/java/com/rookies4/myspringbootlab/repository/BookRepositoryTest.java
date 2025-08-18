@@ -107,6 +107,7 @@ public class BookRepositoryTest {
         book.setAuthor("홍길동");
         book.setIsbn("9788956746425");
         book.setPrice(30000);
+        book.setPublishDate(LocalDate.of(2025, 3, 24));
         Book savedBook = bookRepository.save(book);
         
         // When
