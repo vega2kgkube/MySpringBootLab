@@ -28,10 +28,10 @@ public class BookController {
     @GetMapping("/{id}")
     public ResponseEntity<Book> getBookById(@PathVariable Long id) {
         Optional<Book> optionalBook = bookRepository.findById(id);
-
+        //map(Function) T -> R
         return optionalBook.map(book -> ResponseEntity.ok(book))
                 //.map(ResponseEntity::ok)
-                //.orElse(ResponseEntity.notFound().build());
+                //.orElse(ResponseEntity.notFound().build()); //Body가 없고, 404 status code만 반환됨
                 .orElseThrow(() -> new BusinessException("Book Not Found", HttpStatus.NOT_FOUND));
     }
     
@@ -60,6 +60,7 @@ public class BookController {
     public ResponseEntity<Book> updateBook(@PathVariable Long id, @RequestBody Book bookDetail) {
         Book existBook = bookRepository.findById(id)
                 .orElseThrow(() -> new BusinessException("Book Not Found", HttpStatus.NOT_FOUND));
+        //가격만 변경
         existBook.setPrice(bookDetail.getPrice());
 
         Book updatedBook = bookRepository.save(existBook);
@@ -71,9 +72,9 @@ public class BookController {
     public ResponseEntity<Void> deleteBook(@PathVariable Long id) {
         //매칭돠는 Book 이 없으면
         if (!bookRepository.existsById(id)) {
-            return ResponseEntity.notFound().build(); //404
+            return ResponseEntity.notFound().build(); //body는 없고, 404 status code만 반환
         }
         bookRepository.deleteById(id);
-        return ResponseEntity.noContent().build(); //204
+        return ResponseEntity.noContent().build(); ////body는 없고, 204 status code만 반환
     }
 }
